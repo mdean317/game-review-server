@@ -20,6 +20,9 @@ app.use(morgan("dev"));
 // Set up use of user sessions
 const session = require('express-session');
 
+// CORS set-up to allow connection to API
+const cors = require('cors')
+
 // ------------------------ SET UP AND CONNECT TO DB ------------------------- // 
 const mongoose = require("mongoose"); 
 const MongoStore = require("connect-mongo");
@@ -51,6 +54,25 @@ app.use(passUserToView);
 // Load package to help manipulate file directory paths
 const path = require("path");
 app.use(express.static(path.join(__dirname, "public")));
+
+// ------------------------ CONNECT TO RAWG API ------------------------- //
+
+app.use(cors()) // CORS required to pull data from API
+const API_KEY = process.env.RAWG_API_KEY // API Key required to access RAWG Database
+
+app.get('/api/games', async (req, res) => {
+  
+  const search = req.query.search || '' // logic to query search in front end 
+  const url = `https://api.rawg.id/api/games?key=${API_KEY}&search=${search}` // source for connected app to API to pull data
+
+  try {
+    const res = await fetch(url)
+    const rawgData = await res.json()
+    res.json(rawgData) // Populate data into front-end to be received
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch from RAWG API'})
+  }
+})
 
 // ------------------------ SERVER LOGIC ------------------------- // 
 
@@ -93,4 +115,5 @@ app.delete("/reviews/:reviewID", nomCtrl.delete);
 // Listener
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
+  console.log(`Proxy server running on http://localhost:${port}`) // If server is pushed to AWS, will need to update this
 });
