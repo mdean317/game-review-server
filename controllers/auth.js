@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/auth.js");
+const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
 module.exports = router;
 
 router.post("/sign-up", async (req, res) => {
     
-    const isUserInDatabase = await User.findOne({ userAccount: req.body.userAccount });
+    console.log(req.body);
+    const isUserInDatabase = await User.findOne({ accountName: req.body.accountName });
     if (isUserInDatabase) {
-        return res.send("Account name is  already taken.");
+        return res.send("Account name is already taken.");
     }
     if (req.body.password !== req.body.confirmPassword) {
         return res.send("Password and Confirm Password must match");
@@ -18,7 +19,7 @@ router.post("/sign-up", async (req, res) => {
 
     const user = await User.create(req.body);
     req.session.user = {
-        userName: user.userName,
+        accountName: user.accountName,
       };
       
       req.session.save(() => {
