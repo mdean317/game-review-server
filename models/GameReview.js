@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-  user: String, // reference user object
-  gameId: String,
-  stars: Number, // limit between 1 and 5
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  gameAPIId: Number, // Connect game ID from API
+  stars: {type: Number, enum: [1, 2, 3, 4, 5]},
   title: String,
   body: String,
   likes: Number,

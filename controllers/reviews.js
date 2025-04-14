@@ -1,0 +1,109 @@
+const GameReview = require("../models/GameReview");
+const mongoose = require("mongoose");
+
+// Get all reviews 
+const index = async (req, res) => {
+
+  const allReviews = await GameReview.find()
+
+  res.render('app.jsx', { allReviews: allReviews });
+
+};
+
+// Get all reviews 
+const indexByUser = async (req, res) => {
+
+  // Get only user reviews
+  const allUsersReviews = await GameReview.find({ user: req.session.user._id });
+
+  res.render('app.jsx', { allUsersReviews: allUsersReviews });
+
+};
+
+// RENDER new review page display, wuth or without game selection.  
+const newReview = async (req, res) => {
+
+  const gameID = null;
+
+  // Check if a game has already been selected for the review. 
+  if (req.params.gameID) {
+
+    gameID = req.params.gameID;
+
+  }
+
+  res.render('app.jsx', { gameID: gameID });
+
+};
+
+const show = async (req, res) => {
+  
+  // Get review to show. 
+  const reviewToshow = await GameReview.findById(req.params.reviewID);
+
+  res.json(reviewToshow);
+
+  // Send review to show. 
+  res.render('maappin.jsx', { review: reviewToshow })
+
+  
+};
+// CREATE new review in DB 
+const create = async (req, res) => {
+
+  // Create the review
+  const newReview = await GameReview.create(req.body);
+
+  res.render('app.jsx', { reviewOBJ: newReview });
+
+}
+
+// DELETE the selected review
+const deleteReview = async (req, res) => {
+
+  // Delete the review. 
+  await GameReview.findByIdAndDelete(req.params.reviewID);
+
+  // Gather index of reviews to send back to apge. 
+  const allReviews = await GameReview.find()
+
+  res.render('app.jsx', { allReviews: allReviews });
+
+}
+
+// Get data of review to EDIT
+const edit = async (req, res) => {
+
+  // Get review to edit. 
+  const reviewToEdit = await GameReview.findById(req.params.reviewID);
+
+  // Send review to edit. 
+  res.render('app.jsx', { review: reviewToEdit })
+
+}
+
+const update = async (req, res) => {
+
+  const reviewToEdit = await GameReview.findByIdAndUpdate(req.params.reviewID,
+    {
+      stars: req.body.stars,
+      title: req.body.title,
+      body: req.body.body
+    },
+    { new: true });
+
+  
+  res.render('app.jsx', { review: reviewToEdit })
+
+}
+
+module.exports = {
+  index,
+  new: newReview,
+  create,
+  delete: deleteReview,
+  edit,
+  update,
+  show,
+  indexByUser,
+};

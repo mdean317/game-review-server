@@ -4,6 +4,7 @@
 const express = require('express');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Load .environment package, and confure env according to .env file. 
 const dotenv = require("dotenv");
@@ -32,7 +33,7 @@ mongoose.connection.on("connected", () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
 
-// Start user session???
+// Start user session
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -54,41 +55,43 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ------------------------ SERVER LOGIC ------------------------- // 
 
-// Import nom object driver. 
-const reviewCtrl = require("./controllers/review");
-const authCtrl = require("./controllers/auth");
+// Import review object driver. 
+const reviewCtrl = require("./controllers/reviews");
 
+// Import authoriuzation/user object driver.
+const authCtrl = require("./controllers/auth");
 app.use("/auth", authCtrl);
 
 // Set the port from environment variable or default to 3000
 const port = process.env.PORT ? process.env.PORT : "3000";
-
-// --------------------------- NOMINATION functions ---------------------- //
-
 // GET Methods
 
-//Show all reviews
-app.get('/home', reviewCtrl.index);
+// GET: Show all reviews
+app.get('/reviews', reviewCtrl.index);
 
-//Show all reviews by game
+// GET: Show all reviews by game
 app.get('/home/:gameid', reviewCtrl.index);
-app.get('/', reviewCtrl.index);
+
+// GET: Show all reviews by user
+app.get('/review/myReviews', reviewCtrl.indexByUser);
 
 // GET: Display review 
 app.get("/review/new", reviewCtrl.new);
-app.get("/reviews/:review", reviewCtrl.new);
 
-// POST Method - add nom 
+// Show specific review
+app.get("/reviews/:reviewID", reviewCtrl.show);
+
+// Show and EDIT review
+app.get("/reviews/:reviewID/edit", reviewCtrl.edit);
+
+// POST Method - add review 
 app.post("/reviews/new", reviewCtrl.create);
 
-// Show and EDIT nom
-app.get("/reviews/:reviewID/edit", nomCtrl.edit);
+// PUT Method - update review
+app.put("/reviews/:reviewID", reviewCtrl.update);
 
-// PUT Method - update nom
-app.put("/reviews/:reviewID", nomCtrl.update);
-
-// DELETE Method - delete nom
-app.delete("/reviews/:reviewID", nomCtrl.delete);
+// DELETE Method - delete review
+app.delete("/reviews/:reviewID", reviewCtrl.delete);
 
 // Listener
 app.listen(port, () => {
