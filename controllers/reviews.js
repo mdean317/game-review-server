@@ -6,7 +6,7 @@ const index = async (req, res) => {
 
   const allReviews = await GameReview.find()
 
-  res.render('app.jsx', { allReviews: allReviews });
+  res.json(allReviews);
 
 };
 
@@ -16,7 +16,7 @@ const indexByUser = async (req, res) => {
   // Get only user reviews
   const allUsersReviews = await GameReview.find({ user: req.session.user._id });
 
-  res.render('app.jsx', { allUsersReviews: allUsersReviews });
+  res.json(allUsersReviews);
 
 };
 
@@ -32,7 +32,7 @@ const newReview = async (req, res) => {
 
   }
 
-  res.render('app.jsx', { gameID: gameID });
+  res.json(gameID);
 
 };
 
@@ -41,20 +41,19 @@ const show = async (req, res) => {
   // Get review to show. 
   const reviewToshow = await GameReview.findById(req.params.reviewID);
 
-  res.json(reviewToshow);
-
   // Send review to show. 
-  res.render('maappin.jsx', { review: reviewToshow })
+  res.json(reviewToshow);
 
   
 };
+
 // CREATE new review in DB 
 const create = async (req, res) => {
 
   // Create the review
   const newReview = await GameReview.create(req.body);
 
-  res.render('app.jsx', { reviewOBJ: newReview });
+  res.json(newReview);
 
 }
 
@@ -67,7 +66,7 @@ const deleteReview = async (req, res) => {
   // Gather index of reviews to send back to apge. 
   const allReviews = await GameReview.find()
 
-  res.render('app.jsx', { allReviews: allReviews });
+  res.json(allReviews);
 
 }
 
@@ -78,7 +77,8 @@ const edit = async (req, res) => {
   const reviewToEdit = await GameReview.findById(req.params.reviewID);
 
   // Send review to edit. 
-  res.render('app.jsx', { review: reviewToEdit })
+  res.json(reviewToEdit);
+  
 
 }
 
@@ -92,10 +92,9 @@ const update = async (req, res) => {
     },
     { new: true });
 
-  
-  res.render('app.jsx', { review: reviewToEdit })
-
+  res.json(reviewToEdit);
 }
+
 
 module.exports = {
   index,

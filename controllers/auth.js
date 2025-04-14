@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user.js");
+const User = require("../models/auth.js");
 const bcrypt = require("bcrypt");
 module.exports = router;
 
-router.get("/sign-up", (req, res) => {
-    res.render("auth/sign-up.ejs");
-});
-  
 router.post("/sign-up", async (req, res) => {
     
-    const isUserInDatabase = await User.findOne({ userName: req.body.userName });
+    const isUserInDatabase = await User.findOne({ userAccount: req.body.userAccount });
     if (isUserInDatabase) {
-        return res.send("Username already taken.");
+        return res.send("Account name is  already taken.");
     }
     if (req.body.password !== req.body.confirmPassword) {
         return res.send("Password and Confirm Password must match");
@@ -26,7 +22,7 @@ router.post("/sign-up", async (req, res) => {
       };
       
       req.session.save(() => {
-        res.redirect("/");
+        res.json(user);
       });
 
 });
@@ -51,8 +47,8 @@ router.post("/sign-in", async (req, res) => {
         _id: userInDatabase._id
       };
     req.session.save(() => {
-        res.redirect("/");
-     });
+        res.json(userInDatabase);
+    });
 });
   
 router.put("/edit-username", async (req, res) => {
@@ -75,12 +71,12 @@ router.put("/edit-username", async (req, res) => {
         {userName: req.body.newUserName}
       );
    
- res.redirect("/");
+    res.json(userInDatabase);
 
 });
 
 router.get("/sign-out", (req, res) => {
     req.session.destroy(() => {
-        res.redirect("/");
+        res.json();
       });
 });
