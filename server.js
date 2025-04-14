@@ -2,9 +2,13 @@
 
 // Load Express
 const express = require('express');
+const cors = require('cors');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Load .environment package, and confure env according to .env file. 
 const dotenv = require("dotenv");
@@ -20,6 +24,8 @@ app.use(morgan("dev"));
 
 // Set up use of user sessions
 const session = require('express-session');
+
+
 
 // ------------------------ SET UP AND CONNECT TO DB ------------------------- // 
 const mongoose = require("mongoose"); 
