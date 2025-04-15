@@ -50,6 +50,8 @@ const show = async (req, res) => {
 // CREATE new review in DB 
 const create = async (req, res) => {
 
+  console.log(req.body); 
+  
   // Create the review
   const newReview = await GameReview.create(req.body);
 
