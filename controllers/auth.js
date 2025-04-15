@@ -26,7 +26,10 @@ router.post("/sign-up", async (req, res) => {
     };
 
     req.session.save(() => {
-        res.json(newUser);
+        res.json({
+            accountName: newUser.accountName,
+            userName: newUser.userName
+        });
     });
 
 });
@@ -55,9 +58,10 @@ router.post("/sign-in", async (req, res) => {
     };
 
     req.session.save(() => {
-
-        res.json(userInDatabase);
-
+        res.json({
+            accountName: userInDatabase.accountName,
+            userName: userInDatabase.userName
+        });
     });
 });
 

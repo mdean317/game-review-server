@@ -14,7 +14,7 @@ const index = async (req, res) => {
 const indexByUser = async (req, res) => {
 
   // Get only user reviews
-  const allUsersReviews = await GameReview.find({ user: req.session.user._id });
+  const allUsersReviews = await GameReview.find({ user: req.params.user });
 
   res.json(allUsersReviews);
 
