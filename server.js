@@ -79,10 +79,10 @@ app.get('/reviews', reviewCtrl.index);
 app.get('/home/:gameid', reviewCtrl.index);
 
 // GET: Show all reviews by user
-app.get('/review/myReviews', reviewCtrl.indexByUser);
+app.get('/reviews/myReviews', reviewCtrl.indexByUser);
 
 // GET: Display review 
-app.get("/review/new", reviewCtrl.new);
+app.get("/reviews/new", reviewCtrl.new);
 
 // Show specific review
 app.get("/reviews/:reviewID", reviewCtrl.show);
