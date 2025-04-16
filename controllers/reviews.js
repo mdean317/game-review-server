@@ -79,7 +79,9 @@ const edit = async (req, res) => {
     {
       stars: req.body.stars,
       title: req.body.title,
-      body: req.body.body
+      body: req.body.body,
+      likes: req.body.likes,
+      dislikes: req.body.dislikes
     },
     { new: true });
 
