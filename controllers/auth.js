@@ -67,17 +67,10 @@ router.post("/sign-in", async (req, res) => {
 
 router.put("/edit-username", async (req, res) => {
 
-    const userInDatabase = await User.findOne({ userAccount: req.body.accountName });
+    const userInDatabase = await User.findOne({ accountName: req.body.accountName });
 
     if (!userInDatabase) {
         return res.send("User does not exist.");
-    }
-    const validPassword = bcrypt.compareSync(
-        req.body.password,
-        userInDatabase.password
-    );
-    if (!validPassword) {
-        return res.send("Authentication failed. Please try again.");
     }
 
     userInDatabase = await User.findOneAndUpdate(
