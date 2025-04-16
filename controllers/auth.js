@@ -67,8 +67,8 @@ router.post("/sign-in", async (req, res) => {
 
 router.put("/edit-username", async (req, res) => {
 
-    const User = await User.findOneAndUpdate({accountName: req.body.accountName}, {userName: req.body.userName}, {new: true});
-    res.json(User);
+    const editUser = await User.findOneAndUpdate({accountName: req.body.accountName}, {userName: req.body.userName}, {new: true});
+    res.json(editUser);
 
 });
 
