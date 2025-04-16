@@ -67,18 +67,8 @@ router.post("/sign-in", async (req, res) => {
 
 router.put("/edit-username", async (req, res) => {
 
-    const userInDatabase = await User.findOne({ accountName: req.body.accountName });
-
-    if (!userInDatabase) {
-        return res.send("User does not exist.");
-    }
-
-    userInDatabase = await User.findOneAndUpdate(
-        { userAccount: req.body.accountName },
-        { userName: req.body.newUserName }
-    );
-
-    res.json(userInDatabase);
+    const User = await User.findOneAndUpdate({accountName: req.body.accountName}, {userName: req.body.userName}, {new: true});
+    res.json(User);
 
 });
 

@@ -88,13 +88,10 @@ app.get("/reviews/new", reviewCtrl.new);
 app.get("/reviews/:reviewID", reviewCtrl.show);
 
 // Show and EDIT review
-app.get("/reviews/:reviewID/edit", reviewCtrl.edit);
+app.put("/reviews/:reviewID/edit", reviewCtrl.edit);
 
 // POST Method - add review 
 app.post("/reviews/new", reviewCtrl.create);
-
-// PUT Method - update review
-app.put("/reviews/:reviewID", reviewCtrl.update);
 
 // DELETE Method - delete review
 app.delete("/reviews/:reviewID", reviewCtrl.delete);
