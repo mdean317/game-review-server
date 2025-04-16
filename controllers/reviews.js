@@ -75,17 +75,6 @@ const deleteReview = async (req, res) => {
 // Get data of review to EDIT
 const edit = async (req, res) => {
 
-  // Get review to edit. 
-  const reviewToEdit = await GameReview.findById(req.params.reviewID);
-
-  // Send review to edit. 
-  res.json(reviewToEdit);
-  
-
-}
-
-const update = async (req, res) => {
-
   const reviewToEdit = await GameReview.findByIdAndUpdate(req.params.reviewID,
     {
       stars: req.body.stars,
@@ -104,7 +93,6 @@ module.exports = {
   create,
   delete: deleteReview,
   edit,
-  update,
   show,
   indexByUser,
 };
